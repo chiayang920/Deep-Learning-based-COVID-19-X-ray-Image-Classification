@@ -1,0 +1,35 @@
+{% extends 'website/base/basexray.html' %}
+
+{% block title %}
+    XRayStaffXrayPage
+{% endblock %}
+
+{% block body %}
+    {% for i in all_diagnosis %}
+        {% if i.D_xr_queue %}
+        <div class="xray-table">
+            <p>NRIC: {{i.D_PatientID.CR_PatientID.P_NRIC}}</p>
+            <p>Name: {{i.D_PatientID.CR_PatientID.P_Name}}</p>
+            <p>Covid-19 Risk (Symptoms): {{i.D_SymptomRisk}}</p>
+            <p>X-Ray prediction: {{i.D_XRayRisk}}</p>
+
+                {% if not message_flag %}
+                    <form action="/XRayStaffXrayPage/{{ i.D_PatientID.CR_PatientID.id }}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ pictureform.as_p }}
+                        <button>Submit</button>
+                    </form>
+                {% else %}
+                    <p>Image successfully uploaded!</p>
+                {% endif %}
+                <a href="/completeXray/{{ i.D_PatientID.CR_PatientID.id }}"><button >Complete X-Ray</button></a>
+          </div>    
+        <div class="back-button">
+            <a href="javascript:history.go(-1)"><button>Back</button></a>
+        </div>
+      
+            
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
