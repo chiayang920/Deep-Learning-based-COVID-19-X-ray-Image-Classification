@@ -1,0 +1,42 @@
+{% extends 'website/base/basedoctor.html' %}
+
+{% block title %}
+    DoctorSeePatient
+{% endblock %}
+
+{% block body %}
+    <div class="see-patient-table">
+        <p>NRIC: {{ currentdiagnosis.D_PatientID.CR_PatientID.P_NRIC }}</p>
+        <p>Name: {{ currentdiagnosis.D_PatientID.CR_PatientID.P_Name }}</p>
+        <p>Temperature range: {{ currentdiagnosis.D_PatientID.CR_FeverTemp }}</p>
+        <p>Covid-19 Risk(Symptoms): {{ currentdiagnosis.D_SymptomRisk }}</p>
+        <a href="/DoctorViewPatientQuestionnaire/{{ currentdiagnosis.D_PatientID.CR_PatientID.id }}"><button>View questionnaire</button></a>
+        <a href= "/add_to_xr_queue/{{ currentdiagnosis.D_PatientID.CR_PatientID.id }}"><button>Register patient for X-ray</button></a>
+
+        <br>
+        <br>
+
+        {% if not currentdiagnosis.D_XRayPicture %}
+        <p>X-Ray: Not yet taken</p>
+        {% else %}
+        <p class="xrayimage">X Ray: <br><img src="{{ currentdiagnosis.D_XRayPicture.url }}" alt="XrayImg" width="600" height="400"></p>
+        {% endif %}
+        <p>Covid-19 Risk(X-Ray): {{ currentdiagnosis.D_XRayRisk }}</p>
+        
+        <div class="diagnoseform">
+            <form action="/DoctorSeePatient/{{ currentdiagnosis.D_PatientID.CR_PatientID.id }}" method="POST">
+                {% csrf_token %}
+                <ul class="horizontal" >
+                    <br>
+                {{ diagnosisform.as_p }}
+                </ul>
+                <button>Diagnose</button>
+            </form>
+        </div>
+    </div>   
+
+    <br>
+    <div class="back-button">
+        <a href="javascript:history.go(-1)"><button>Back</button></a>
+    </div>
+{% endblock %}

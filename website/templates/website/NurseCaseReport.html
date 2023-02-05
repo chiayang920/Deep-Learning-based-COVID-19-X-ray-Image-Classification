@@ -1,0 +1,19 @@
+{% extends 'website/base/basenurse.html' %}
+
+{% block title %}
+    NurseCaseReport
+{% endblock %}
+
+{% block body %}
+<div class="nursecasereport">
+    <form action="/NurseCaseReport/", method="POST">
+        {% csrf_token %}
+        <ul class="horizontal">
+            {{ questionnaire.as_p }}
+        </ul>
+        <div>
+            <button>Submit</button>
+        </div>
+    </form> 
+</div>
+{% endblock %}
